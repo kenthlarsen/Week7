@@ -74,8 +74,7 @@ public class ProjectsApp {
 		curProject = projectService.fetchProjectById(projectId);
 		if (Objects.isNull(curProject)) {
 			System.out.println("\nThat is not a valid project.");
-		}
-		
+		}		
 	}
 	private void listProjects() {
 		List<Project> projects = projectService.fetchAllProjects();
