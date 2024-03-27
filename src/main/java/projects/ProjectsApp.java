@@ -19,7 +19,7 @@ public class ProjectsApp {
 			"2) List projects",
 			"3) Select a project",
 			"4) Update project details",
-			"5) Delete a project3"
+			"5) Delete a project"
 						
 	);
 //@formatter:on	
