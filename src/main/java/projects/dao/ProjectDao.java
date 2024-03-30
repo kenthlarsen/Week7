@@ -133,7 +133,7 @@ public Optional <Project> fetchProjectById(Integer projectId) {
 		catch(SQLException e) {
 			throw new DbException(e);
 		}
-	//return null;
+	
 	}
 private List<Material>fetchMaterialsForProject(Connection conn, Integer projectId)
 	throws SQLException {
@@ -205,7 +205,7 @@ public boolean modifyProjectDetails(Project project) {
 			+ "estimated_hours = ?, "
 			+ "actual_hours = ?, "
 			+ "difficulty = ?, "
-			+ "notes = ?, "
+			+ "notes = ? "
 			+ "WHERE project_id = ?";
 	// @formatter:on
 	
@@ -223,7 +223,7 @@ public boolean modifyProjectDetails(Project project) {
 			boolean modified = stmt.executeUpdate() == 1;
 			commitTransaction(conn);
 			
-			return true;			
+			return modified;			
 		}
 		catch(Exception e) {
 			rollbackTransaction(conn);
@@ -235,6 +235,27 @@ public boolean modifyProjectDetails(Project project) {
 	}
 }
 public boolean deleteProject(Integer projectId) {
-		return false;
+	String sql = "DELETE FROM " + PROJECT_TABLE + " WHERE project_id = ?";
+	
+	try(Connection conn = DbConnection.getConnection()){
+		startTransaction(conn);
+		
+		try(PreparedStatement stmt = conn.prepareStatement(sql)){
+			setParameter(stmt, 1, projectId, Integer.class);
+			
+			boolean deleted = stmt.executeUpdate() == 1;
+			
+			commitTransaction(conn);
+			return deleted;
+		}
+		catch(Exception e) {
+			rollbackTransaction(conn);
+			throw new DbException(e);
+		}
+	}
+	catch(SQLException e) {
+		throw new DbException(e);
+	}
+		//return false;
 }
 }
